@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/opentracing/opentracing-go"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,6 +16,9 @@ type EventHandler struct {
 }
 
 func (handler *EventHandler) AddEvent(ctx *gin.Context) {
+	span, _ := opentracing.StartSpanFromContext(ctx.Request.Context(), "POST /events")
+	defer span.Finish()
+
 	var EventDTO dto.EventRequestDTO
 	if err := ctx.ShouldBindJSON(&EventDTO); err != nil {
 		handler.Logger.Debug(err.Error())
@@ -35,6 +39,9 @@ func (handler *EventHandler) AddEvent(ctx *gin.Context) {
 }
 
 func (handler *EventHandler) GetAll(ctx *gin.Context) {
+	span, _ := opentracing.StartSpanFromContext(ctx.Request.Context(), "GET /events")
+	defer span.Finish()
+
 	handler.Logger.Info("Getting system events")
 
 	offersDTO, err := handler.Service.GetAll()
