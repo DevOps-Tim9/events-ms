@@ -56,7 +56,7 @@ func initDB() (*gorm.DB, error) {
 
 func InitJaeger() (opentracing.Tracer, io.Closer, error) {
 	cfg := config.Configuration{
-		ServiceName: "jobs-ms",
+		ServiceName: "events-ms",
 		Sampler: &config.SamplerConfig{
 			Type:  "const",
 			Param: 1,

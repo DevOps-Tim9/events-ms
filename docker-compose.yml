@@ -46,17 +46,17 @@ services:
     volumes:
       - logs:/root/logs
 
-promtail:
-  image: grafana/promtail:latest
-  networks:
-    - events-ms
-    - network-for-ms
-  volumes:
-    - "./promtail:/etc/promtail"
-    - "/var/log:/var/log"
-    - logs:/var/logs
-  command: -config.file=/etc/promtail/promtail.yml
-  restart: always
+  promtail:
+    image: grafana/promtail:latest
+    networks:
+      - events-ms
+      - network-for-ms
+    volumes:
+      - "./promtail:/etc/promtail"
+      - "/var/log:/var/log"
+      - logs:/var/logs
+    command: -config.file=/etc/promtail/promtail.yml
+    restart: always
 
 volumes:
   data:
