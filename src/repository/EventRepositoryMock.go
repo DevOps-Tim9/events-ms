@@ -25,3 +25,11 @@ func (repo *EventRepositoryMock) GetAll() ([]*model.Event, error) {
 	}
 	return args.Get(0).([]*model.Event), args.Get(1).(error)
 }
+
+func (repo *EventRepositoryMock) Delete(id int) error {
+	args := repo.Called(id)
+	if args.Get(0) == nil {
+		return nil
+	}
+	return args.Get(0).(error)
+}
