@@ -10,6 +10,7 @@ import (
 type IEventRepository interface {
 	Add(model.Event) (model.Event, error)
 	GetAll() ([]*model.Event, error)
+	Delete(int) error
 }
 
 func NewEventRepository(database *gorm.DB) IEventRepository {
@@ -35,4 +36,14 @@ func (repo *EventRepository) GetAll() ([]*model.Event, error) {
 	}
 
 	return events, nil
+}
+
+func (repo *EventRepository) Delete(id int) error {
+	result := repo.Database.Delete(&model.Event{}, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

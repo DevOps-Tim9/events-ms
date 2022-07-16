@@ -18,7 +18,7 @@ services:
       retries: 3
       start_period: 30s
     ports:
-      - "5436:5432"
+      - "5450:5432"
     volumes:
       - data:/var/lib/postgresql/data
 
@@ -45,6 +45,18 @@ services:
         condition: service_healthy
     volumes:
       - logs:/root/logs
+
+promtail:
+  image: grafana/promtail:latest
+  networks:
+    - events-ms
+    - network-for-ms
+  volumes:
+    - "./promtail:/etc/promtail"
+    - "/var/log:/var/log"
+    - logs:/var/logs
+  command: -config.file=/etc/promtail/promtail.yml
+  restart: always
 
 volumes:
   data:
