@@ -69,7 +69,7 @@ func main() {
 
 	database, _ := initDB()
 
-	port := fmt.Sprintf(":%s", "9081")
+	port := fmt.Sprintf(":%s", os.Getenv("SERVER_PORT"))
 
 	EventRepo := initEventRepo(database)
 	EventService := initEventService(EventRepo)
