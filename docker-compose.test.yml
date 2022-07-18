@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  events-database-test:
+    image: postgres:13
+    restart: always
+    networks:
+      - events-ms-test
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: SystemEvents-tests
+    healthcheck:
+      test: pg_isready -U postgres -d SystemEvents-tests
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    ports:
+      - 5432
+
+  events-server-test:
+    build:
+      dockerfile: Dockerfile.test
+      context: .
+    networks:
+      - events-ms-test
+      - network-for-ms
+    environment:
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: admin
+      DATABASE_DOMAIN: events-database-test
+      DATABASE_SCHEMA: SystemEvents-tests
+      DATABASE_PORT: 5432
+      SERVER_PORT: 9091
+    ports:
+      - "9081:9081"
+    depends_on:
+      events-database-test:
+        condition: service_healthy
+
+networks:
+  events-ms-test:
+    name: events-ms-test
+    driver: bridge
+  network-for-ms:
+    name: network-for-ms
